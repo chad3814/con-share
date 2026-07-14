@@ -44,7 +44,7 @@ con-share/mvp-photo-sharing/
 │     ├─ login/page.tsx        # sign-in page
 │     └─ api/auth/[...nextauth]/route.ts
 ├─ types/next-auth.d.ts        # session/user/JWT augmentation for `role`
-├─ proxy.ts                    # Next 16 route protection (was middleware.ts)
+├─ src/proxy.ts                # Next 16 route protection (was middleware.ts); MUST live in src/ for a src/app layout
 ├─ vitest.config.ts
 ├─ vitest.setup.ts
 ├─ playwright.config.ts
@@ -812,7 +812,7 @@ git commit -m "feat: add authorization helpers (requireUser/requireAdmin/isAdmin
 ### Task 8: Route protection via `proxy.ts`
 
 **Files:**
-- Create: `proxy.ts` (project root — Next 16's renamed middleware)
+- Create: `src/proxy.ts` — Next 16's renamed middleware. NOTE: with a `src/app` layout, Next 16 only detects the proxy at `src/proxy.ts`; a project-root `proxy.ts` is silently ignored (no middleware installed, no warning).
 
 **Interfaces:**
 - Consumes: `auth` from `@/auth`.
