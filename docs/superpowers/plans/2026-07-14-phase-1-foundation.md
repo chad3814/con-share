@@ -6,7 +6,7 @@
 
 **Architecture:** Next.js 16 App Router (TypeScript, Turbopack) on Vercel, Postgres on Neon accessed through Prisma 7 with the Neon serverless driver adapter, Auth.js v5 (Google + GitHub) using the Prisma adapter with database sessions. A zod-validated env module fronts all secrets. Vitest for unit/component tests, Playwright for E2E smoke, and a check gate (lint + typecheck + test + build) enforced pre-commit and in CI.
 
-**Tech Stack:** Next.js 16.2, React 19.2, TypeScript 7.0, Prisma 7.8 + `@prisma/adapter-neon` + `@neondatabase/serverless`, Auth.js v5 (`next-auth@5.0.0-beta`) + `@auth/prisma-adapter`, zod 4.4, Tailwind CSS v4, Vitest 4, Playwright 1.61.
+**Tech Stack:** Next.js 16.2, React 19.2, TypeScript 5.9.3 (Next 16's pinned version — TS 7 was attempted but reverted: `typescript-eslint` peer-caps at `typescript <6.1.0`, so TS 7 breaks all ESLint; revisit when the lint toolchain supports it), Prisma 7.8 + `@prisma/adapter-neon` + `@neondatabase/serverless`, Auth.js v5 (`next-auth@5.0.0-beta`) + `@auth/prisma-adapter`, zod 4.4, Tailwind CSS v4, Vitest 4, Playwright 1.61.
 
 ## Global Constraints
 
@@ -126,9 +126,9 @@ git commit -m "chore: scaffold Next.js 16 app (App Router, TS, Tailwind, Turbopa
 
 Install: `npm install -D prettier`
 
-- [ ] **Step 2: Fix `tsconfig.json` for TypeScript 7** — `baseUrl` is now a hard error; use relative `paths`. Ensure strict mode and the `@/*` alias resolve without `baseUrl`.
+- [ ] **Step 2: Confirm `tsconfig.json` (TypeScript 5.9.3)** — the scaffold already ships a valid config (`strict: true`, `paths` alias, no `baseUrl`, `moduleResolution: "bundler"`). No changes were needed. (Note: TS 7 was attempted and reverted — see Tech Stack.)
 
-Edit `tsconfig.json` `compilerOptions` so it contains (remove any `baseUrl` line):
+`tsconfig.json` `compilerOptions` should contain:
 
 ```json
 {
