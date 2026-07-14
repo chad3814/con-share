@@ -1,0 +1,29 @@
+import { signIn } from "@/auth";
+
+export default function LoginPage() {
+  return (
+    <section className="mx-auto max-w-sm space-y-4">
+      <h1 className="text-xl font-semibold">Sign in</h1>
+      <form
+        action={async () => {
+          "use server";
+          await signIn("github", { redirectTo: "/" });
+        }}
+      >
+        <button type="submit" className="w-full rounded border border-gray-300 py-2">
+          Continue with GitHub
+        </button>
+      </form>
+      <form
+        action={async () => {
+          "use server";
+          await signIn("google", { redirectTo: "/" });
+        }}
+      >
+        <button type="submit" className="w-full rounded border border-gray-300 py-2">
+          Continue with Google
+        </button>
+      </form>
+    </section>
+  );
+}
