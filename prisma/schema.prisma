@@ -15,16 +15,18 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  displayName   String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime  @default(now())
+  id                 String       @id @default(cuid())
+  name               String?
+  displayName        String?
+  email              String?      @unique
+  emailVerified      DateTime?
+  image              String?
+  role               Role         @default(USER)
+  accounts           Account[]
+  sessions           Session[]
+  createdAt          DateTime     @default(now())
+  conventionsCreated Convention[] @relation("ConventionCreatedBy")
+  photos             Photo[]      @relation("PhotoUploader")
 }
 
 model Account {
@@ -59,4 +61,54 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum PhotoStatus {
+  PENDING
+  READY
+  TAKEN_DOWN
+  FAILED
+}
+
+model Convention {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  location    String?
+  startDate   DateTime?
+  endDate     DateTime?
+  bannerKey   String?
+  createdById String
+  createdBy   User      @relation("ConventionCreatedBy", fields: [createdById], references: [id])
+  photos      Photo[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Photo {
+  id                 String      @id @default(cuid())
+  conventionId       String
+  convention         Convention  @relation(fields: [conventionId], references: [id], onDelete: Cascade)
+  uploaderId         String
+  uploader           User        @relation("PhotoUploader", fields: [uploaderId], references: [id])
+  status             PhotoStatus @default(PENDING)
+  originalKey        String
+  webKey             String?
+  thumbKey           String?
+  exifKey            String?
+  published          Boolean     @default(false)
+  nsfw               Boolean     @default(false)
+  description        String?
+  photographerCredit String?
+  width              Int?
+  height             Int?
+  contentType        String?
+  takenDownAt        DateTime?
+  takenDownById      String?
+  takedownReason     String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  @@index([conventionId, published, status])
 }
