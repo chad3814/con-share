@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
-import { normalizeTagName } from "@/lib/tags";
+import { normalizeTagName } from "@/lib/tag-utils";
 
 interface TagSuggestResponse {
   tags: string[];

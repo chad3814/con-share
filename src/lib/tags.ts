@@ -1,23 +1,7 @@
 import type { Prisma } from "@/generated/prisma/client";
+import { normalizeTagList, normalizeTagName } from "@/lib/tag-utils";
 
-const MAX_TAGS = 20;
-
-export function normalizeTagName(raw: string): string {
-  return raw.trim().toLowerCase().replace(/\s+/g, " ");
-}
-
-export function normalizeTagList(raw: string[]): string[] {
-  const seen = new Set<string>();
-  const result: string[] = [];
-  for (const item of raw) {
-    const name = normalizeTagName(item);
-    if (name.length === 0 || seen.has(name)) continue;
-    seen.add(name);
-    result.push(name);
-    if (result.length >= MAX_TAGS) break;
-  }
-  return result;
-}
+export { normalizeTagList, normalizeTagName };
 
 // Thin DB helpers (no unit test — per the plan's testing strategy).
 // `@/lib/prisma` is imported lazily (dynamic import) rather than at module
