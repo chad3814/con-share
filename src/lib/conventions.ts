@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { slugify, uniqueSlug } from "@/lib/slug";
+import { publicUrl } from "@/lib/s3";
 import type { ConventionInput } from "@/lib/validation/convention";
 import type { Convention, PhotoStatus } from "@/generated/prisma/client";
+import type { GalleryPhoto } from "@/components/PhotoGrid";
 
 const READY_STATUS: PhotoStatus = "READY";
 const publishedPhotoWhere = { published: true, status: READY_STATUS };
@@ -50,4 +52,25 @@ export async function updateConvention(
   input: ConventionInput,
 ): Promise<Convention> {
   return prisma.convention.update({ where: { id }, data: { ...input } });
+}
+
+export async function getPublishedPhotos(conventionId: string): Promise<GalleryPhoto[]> {
+  const photos = await prisma.photo.findMany({
+    where: { conventionId, published: true, status: READY_STATUS },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, webKey: true, thumbKey: true, nsfw: true, description: true },
+  });
+  const gallery: GalleryPhoto[] = [];
+  for (const photo of photos) {
+    // status=READY guarantees these are set, but narrow explicitly for TS.
+    if (photo.webKey === null || photo.thumbKey === null) continue;
+    gallery.push({
+      id: photo.id,
+      thumbUrl: publicUrl(photo.thumbKey),
+      webUrl: publicUrl(photo.webKey),
+      nsfw: photo.nsfw,
+      description: photo.description,
+    });
+  }
+  return gallery;
 }

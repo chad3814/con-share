@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import PhotoGrid from "@/components/PhotoGrid";
-import { getConventionBySlug } from "@/lib/conventions";
+import { getConventionBySlug, getPublishedPhotos } from "@/lib/conventions";
 import { formatDateRange } from "@/lib/date";
 
 export default async function ConventionGalleryPage({
@@ -26,7 +26,7 @@ export default async function ConventionGalleryPage({
           <p className="text-gray-600">{convention.description}</p>
         ) : null}
       </header>
-      <PhotoGrid photos={[]} />
+      <PhotoGrid photos={await getPublishedPhotos(convention.id)} />
     </section>
   );
 }
