@@ -10,7 +10,7 @@ export type ConventionListItem = Convention & { publishedPhotoCount: number };
 
 export async function listPublicConventions(): Promise<ConventionListItem[]> {
   const conventions = await prisma.convention.findMany({
-    orderBy: { startDate: "desc" },
+    orderBy: { createdAt: "desc" },
     include: { _count: { select: { photos: { where: publishedPhotoWhere } } } },
   });
   return conventions.map(({ _count, ...c }) => ({

@@ -1,13 +1,7 @@
 import { notFound } from "next/navigation";
 import PhotoGrid from "@/components/PhotoGrid";
 import { getConventionBySlug } from "@/lib/conventions";
-
-function formatRange(start: Date | null, end: Date | null): string | null {
-  if (!start) return null;
-  const fmt = (d: Date) =>
-    d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  return end ? `${fmt(start)} – ${fmt(end)}` : fmt(start);
-}
+import { formatDateRange } from "@/lib/date";
 
 export default async function ConventionGalleryPage({
   params,
@@ -18,7 +12,7 @@ export default async function ConventionGalleryPage({
   const convention = await getConventionBySlug(slug);
   if (!convention) notFound();
 
-  const range = formatRange(convention.startDate, convention.endDate);
+  const range = formatDateRange(convention.startDate, convention.endDate);
 
   return (
     <section className="space-y-6">

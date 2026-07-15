@@ -1,8 +1,5 @@
 import type { Convention } from "@/generated/prisma/client";
-
-function toDateInput(d: Date | null | undefined): string {
-  return d ? d.toISOString().slice(0, 10) : "";
-}
+import { toDateInputValue } from "@/lib/date";
 
 export default function ConventionForm({
   action,
@@ -30,11 +27,11 @@ export default function ConventionForm({
       <div className="flex gap-4">
         <label className="block flex-1">
           <span className="text-sm font-medium">Start date</span>
-          <input type="date" name="startDate" defaultValue={toDateInput(convention?.startDate)} className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <input type="date" name="startDate" defaultValue={toDateInputValue(convention?.startDate)} className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
         </label>
         <label className="block flex-1">
           <span className="text-sm font-medium">End date</span>
-          <input type="date" name="endDate" defaultValue={toDateInput(convention?.endDate)} className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <input type="date" name="endDate" defaultValue={toDateInputValue(convention?.endDate)} className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
         </label>
       </div>
       <button type="submit" className="rounded bg-gray-900 px-4 py-2 text-sm text-white">{submitLabel}</button>
