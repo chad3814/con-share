@@ -109,6 +109,24 @@ model Photo {
   takedownReason     String?
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
+  tags               PhotoTag[]
 
   @@index([conventionId, published, status])
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  photos    PhotoTag[]
+  createdAt DateTime   @default(now())
+}
+
+model PhotoTag {
+  photoId String
+  tagId   String
+  photo   Photo @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  tag     Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([photoId, tagId])
+  @@index([tagId])
 }
