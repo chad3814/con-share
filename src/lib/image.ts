@@ -1,8 +1,32 @@
 import sharp from "sharp";
 import convert from "heic-convert";
+import exifr from "exifr";
 
 const WEB_MAX = 2000;
 const THUMB_MAX = 400;
+const HEIC_BRANDS = new Set(["heic", "heix", "hevc", "hevx", "heim", "heis", "hevm", "hevs", "mif1", "msf1"]);
+
+export function isHeic(input: Buffer): boolean {
+  if (input.length < 12) return false;
+  if (input.toString("latin1", 4, 8) !== "ftyp") return false;
+  return HEIC_BRANDS.has(input.toString("latin1", 8, 12));
+}
+
+// Reads EXIF directly from the RAW original bytes via exifr, independent of
+// sharp/heic-convert. This is the only path that recovers EXIF (incl. GPS)
+// from HEIC: heic-convert drops it during JPEG re-encode, and sharp's libheif
+// can't safely read metadata from real iPhone HEIC files (see isHeic comment
+// below). Works for JPEG/HEIC/etc. Returns a JSON buffer (dates serialize to
+// ISO strings) or null if nothing was found / parsing failed.
+async function extractExif(input: Buffer): Promise<Buffer | null> {
+  try {
+    const parsed = await exifr.parse(input, { tiff: true, exif: true, gps: true });
+    if (!parsed || Object.keys(parsed).length === 0) return null;
+    return Buffer.from(JSON.stringify(parsed));
+  } catch {
+    return null;
+  }
+}
 
 export async function processImage(input: Buffer): Promise<{
   web: Buffer;
@@ -11,24 +35,18 @@ export async function processImage(input: Buffer): Promise<{
   width: number;
   height: number;
 }> {
-  const meta = await sharp(input).metadata();
-  const exif = meta.exif ?? null;
+  // sharp's libheif rejects real iPhone HEICs at metadata() time (iref reference
+  // security limit of 16; Apple files carry ~48). Detect HEIC by magic bytes and
+  // decode via heic-convert (libheif-js) BEFORE sharp touches the bytes.
+  const decoded = isHeic(input)
+    ? Buffer.from(await convert({ buffer: input, format: "JPEG", quality: 0.92 }))
+    : input;
 
-  // sharp's prebuilt libvips/libheif cannot decode HEVC-coded HEIC pixels
-  // (only container/box metadata). Fall back to heic-convert (libheif-js/WASM)
-  // to decode HEIC/HEIF input into a JPEG buffer sharp can then process.
-  const decoded =
-    meta.format === "heif"
-      ? Buffer.from(await convert({ buffer: input, format: "JPEG", quality: 0.92 }))
-      : input;
+  const exif = await extractExif(input);
 
-  let width = meta.width ?? 0;
-  let height = meta.height ?? 0;
-  if (meta.width === undefined || meta.height === undefined) {
-    const decodedMeta = await sharp(decoded).metadata();
-    width = decodedMeta.width ?? 0;
-    height = decodedMeta.height ?? 0;
-  }
+  const meta = await sharp(decoded).metadata();
+  const width = meta.width ?? 0;
+  const height = meta.height ?? 0;
 
   const web = await sharp(decoded)
     .rotate() // apply EXIF orientation before stripping

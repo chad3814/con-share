@@ -40,7 +40,7 @@ export async function POST(
     await putObject(webKey, web, "image/webp");
     await putObject(thumbKey, thumb, "image/webp");
     if (exif) {
-      await putObject(exifKey, exif, "application/octet-stream");
+      await putObject(exifKey, exif, "application/json");
     }
 
     const updated = await prisma.photo.update({
