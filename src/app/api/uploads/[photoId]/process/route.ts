@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { AuthError, requireUser } from "@/lib/auth-helpers";
 import { isAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
-import { getObjectBytes, putObject } from "@/lib/s3";
+import { getObjectBytes, publicUrl, putObject } from "@/lib/s3";
 import { processImage } from "@/lib/image";
 
 export async function POST(
@@ -55,7 +55,7 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ status: updated.status });
+    return NextResponse.json({ status: updated.status, webUrl: publicUrl(webKey) });
   } catch {
     await prisma.photo.update({ where: { id: photo.id }, data: { status: "FAILED" } });
     return NextResponse.json({ error: "Processing failed" }, { status: 500 });
