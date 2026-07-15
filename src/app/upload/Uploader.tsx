@@ -21,6 +21,7 @@ interface FileEntry {
   photoId?: string;
   url?: string;
   uploaded: boolean;
+  done: boolean;
 }
 
 interface PresignResponse {
@@ -66,7 +67,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
     const fileList = event.target.files;
     if (!fileList) return;
     const files = Array.from(fileList);
-    entriesRef.current = files.map((file) => ({ file, uploaded: false }));
+    entriesRef.current = files.map((file) => ({ file, uploaded: false, done: false }));
     setItems(
       files.map((file) => ({
         name: file.name,
@@ -115,6 +116,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         updateItem(index, { state: "failed", error: "Processing succeeded but no image URL was returned" });
         return;
       }
+      entry.done = true;
       updateItem(index, { state: "ready", webUrl: data.webUrl, error: undefined });
     } catch (error) {
       updateItem(index, {
@@ -128,6 +130,11 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
     const entries = entriesRef.current;
     if (batchInFlight || entries.length === 0 || !conventionId) return;
 
+    const targets = entries
+      .map((entry, index) => ({ entry, index }))
+      .filter(({ entry }) => !entry.done);
+    if (targets.length === 0) return;
+
     setBatchInFlight(true);
     try {
       const res = await fetch("/api/uploads/presign", {
@@ -135,7 +142,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           conventionId,
-          files: entries.map((entry) => ({ contentType: entry.file.type, size: entry.file.size })),
+          files: targets.map(({ entry }) => ({ contentType: entry.file.type, size: entry.file.size })),
         }),
       });
 
@@ -146,14 +153,19 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
 
       const data = (await res.json()) as PresignResponse;
       data.uploads.forEach((upload, i) => {
-        const entry = entries[i];
-        if (entry) {
-          entry.photoId = upload.photoId;
-          entry.url = upload.url;
+        const target = targets[i];
+        if (target) {
+          target.entry.photoId = upload.photoId;
+          target.entry.url = upload.url;
+          target.entry.uploaded = false;
         }
       });
 
-      await runPool(entries.map((_, i) => i), CONCURRENCY, (index) => uploadOne(index));
+      await runPool(
+        targets.map(({ index }) => index),
+        CONCURRENCY,
+        (index) => uploadOne(index),
+      );
     } finally {
       setBatchInFlight(false);
     }
