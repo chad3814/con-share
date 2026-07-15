@@ -43,12 +43,12 @@ export function publicUrl(key: string): string {
 // files are read into memory client-side before upload). If that assumption
 // ever breaks, relax this to a content-length-range policy condition or drop
 // it and rely on the DB-side cap + a post-upload size check instead.
-export async function presignPut(key: string, contentType: string, maxBytes: number): Promise<string> {
+export async function presignPut(key: string, contentType: string, contentLength: number): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: env.S3_BUCKET,
     Key: key,
     ContentType: contentType,
-    ContentLength: maxBytes,
+    ContentLength: contentLength,
   });
   return getSignedUrl(s3, command, { expiresIn: 600 });
 }

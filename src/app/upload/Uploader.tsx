@@ -18,6 +18,7 @@ interface FileItem {
 
 interface FileEntry {
   file: File;
+  contentType: string;
   photoId?: string;
   url?: string;
   uploaded: boolean;
@@ -35,6 +36,27 @@ interface ProcessResponse {
 
 const ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";
 const CONCURRENCY = 3;
+
+const CONTENT_TYPE_BY_EXTENSION: Record<string, string> = {
+  ".heic": "image/heic",
+  ".heif": "image/heif",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+};
+
+// Some browsers/OSes (notably Safari on iOS for HEIC/HEIF) leave File.type
+// empty. Fall back to a lowercased-extension lookup so the presign request
+// still carries a usable content type; if the extension is unrecognized,
+// pass the (possibly empty) file.type through and let the server 400.
+function resolveContentType(file: File): string {
+  if (file.type) return file.type;
+  const dotIndex = file.name.lastIndexOf(".");
+  if (dotIndex === -1) return file.type;
+  const extension = file.name.slice(dotIndex).toLowerCase();
+  return CONTENT_TYPE_BY_EXTENSION[extension] ?? file.type;
+}
 
 async function runPool<T>(
   items: T[],
@@ -67,12 +89,17 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
     const fileList = event.target.files;
     if (!fileList) return;
     const files = Array.from(fileList);
-    entriesRef.current = files.map((file) => ({ file, uploaded: false, done: false }));
+    entriesRef.current = files.map((file) => ({
+      file,
+      contentType: resolveContentType(file),
+      uploaded: false,
+      done: false,
+    }));
     setItems(
       files.map((file) => ({
         name: file.name,
         size: file.size,
-        contentType: file.type,
+        contentType: resolveContentType(file),
         state: "pending",
       })),
     );
@@ -95,7 +122,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         updateItem(index, { state: "uploading", error: undefined });
         const putRes = await fetch(entry.url, {
           method: "PUT",
-          headers: { "Content-Type": entry.file.type },
+          headers: { "Content-Type": entry.contentType },
           body: entry.file,
         });
         if (!putRes.ok) {
@@ -142,7 +169,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           conventionId,
-          files: targets.map(({ entry }) => ({ contentType: entry.file.type, size: entry.file.size })),
+          files: targets.map(({ entry }) => ({ contentType: entry.contentType, size: entry.file.size })),
         }),
       });
 

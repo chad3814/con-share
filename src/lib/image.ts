@@ -44,9 +44,17 @@ export async function processImage(input: Buffer): Promise<{
 
   const exif = await extractExif(input);
 
-  const meta = await sharp(decoded).metadata();
-  const width = meta.width ?? 0;
-  const height = meta.height ?? 0;
+  // sharp's top-level metadata().width/height deliberately ignore EXIF
+  // orientation ("EXIF orientation is not taken into consideration" per
+  // sharp's own type docs) even when the pipeline has .rotate() applied
+  // beforehand — that call only affects pixel output, not the metadata()
+  // read. The orientation-aware (i.e. displayed/rotated) dimensions live in
+  // metadata().autoOrient, which sharp always populates regardless of
+  // .rotate(). Read those so portrait iPhone photos (orientation 5-8, which
+  // swap width/height) report correct displayed dims.
+  const rotatedMeta = await sharp(decoded).rotate().metadata();
+  const width = rotatedMeta.autoOrient.width;
+  const height = rotatedMeta.autoOrient.height;
 
   const web = await sharp(decoded)
     .rotate() // apply EXIF orientation before stripping

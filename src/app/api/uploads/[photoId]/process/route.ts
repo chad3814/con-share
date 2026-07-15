@@ -28,6 +28,10 @@ export async function POST(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  if (photo.status === "READY") {
+    return NextResponse.json({ status: "READY", webUrl: publicUrl(photo.webKey ?? "") });
+  }
+
   const base = photo.originalKey.replace(/\/original\.[^/]+$/, "");
   const webKey = `${base}/web.webp`;
   const thumbKey = `${base}/thumb.webp`;
