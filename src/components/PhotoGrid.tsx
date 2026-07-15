@@ -1,3 +1,5 @@
+import PhotoThumb from "@/components/PhotoThumb";
+
 export interface GalleryPhoto {
   id: string;
   thumbUrl: string;
@@ -6,7 +8,13 @@ export interface GalleryPhoto {
   description: string | null;
 }
 
-export default function PhotoGrid({ photos }: { photos: GalleryPhoto[] }) {
+export default function PhotoGrid({
+  photos,
+  showNsfw,
+}: {
+  photos: GalleryPhoto[];
+  showNsfw: boolean;
+}) {
   if (photos.length === 0) {
     return (
       <p className="py-12 text-center text-gray-500">
@@ -17,13 +25,11 @@ export default function PhotoGrid({ photos }: { photos: GalleryPhoto[] }) {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
       {photos.map((photo) => (
-        // Phase 4: NSFW blur — gate rendering/blur on photo.nsfw here.
-        <img
+        <PhotoThumb
           key={photo.id}
-          src={photo.thumbUrl}
+          thumbUrl={photo.thumbUrl}
           alt={photo.description ?? ""}
-          loading="lazy"
-          className="aspect-square w-full rounded object-cover"
+          blurred={photo.nsfw && !showNsfw}
         />
       ))}
     </div>

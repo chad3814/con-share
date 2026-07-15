@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import NsfwToggle from "@/components/NsfwToggle";
 import PhotoGrid from "@/components/PhotoGrid";
 import { getConventionBySlug, getPublishedPhotos } from "@/lib/conventions";
 import { formatDateRange } from "@/lib/date";
+import { SHOW_NSFW_COOKIE, showNsfwFromCookie } from "@/lib/nsfw";
 
 export default async function ConventionGalleryPage({
   params,
@@ -13,6 +16,8 @@ export default async function ConventionGalleryPage({
   if (!convention) notFound();
 
   const range = formatDateRange(convention.startDate, convention.endDate);
+  const cookieStore = await cookies();
+  const showNsfw = showNsfwFromCookie(cookieStore.get(SHOW_NSFW_COOKIE)?.value);
 
   return (
     <section className="space-y-6">
@@ -25,8 +30,12 @@ export default async function ConventionGalleryPage({
         {convention.description ? (
           <p className="text-gray-600">{convention.description}</p>
         ) : null}
+        <NsfwToggle initial={showNsfw} />
       </header>
-      <PhotoGrid photos={await getPublishedPhotos(convention.id)} />
+      <PhotoGrid
+        photos={await getPublishedPhotos(convention.id)}
+        showNsfw={showNsfw}
+      />
     </section>
   );
 }
