@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { ChangeEvent } from "react";
+import { resolveContentType } from "@/lib/content-type";
 
 type ConventionOption = { id: string; name: string };
 
@@ -37,27 +38,6 @@ interface ProcessResponse {
 const ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";
 const CONCURRENCY = 3;
 
-const CONTENT_TYPE_BY_EXTENSION: Record<string, string> = {
-  ".heic": "image/heic",
-  ".heif": "image/heif",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".png": "image/png",
-  ".webp": "image/webp",
-};
-
-// Some browsers/OSes (notably Safari on iOS for HEIC/HEIF) leave File.type
-// empty. Fall back to a lowercased-extension lookup so the presign request
-// still carries a usable content type; if the extension is unrecognized,
-// pass the (possibly empty) file.type through and let the server 400.
-function resolveContentType(file: File): string {
-  if (file.type) return file.type;
-  const dotIndex = file.name.lastIndexOf(".");
-  if (dotIndex === -1) return file.type;
-  const extension = file.name.slice(dotIndex).toLowerCase();
-  return CONTENT_TYPE_BY_EXTENSION[extension] ?? file.type;
-}
-
 async function runPool<T>(
   items: T[],
   limit: number,
@@ -91,7 +71,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
     const files = Array.from(fileList);
     entriesRef.current = files.map((file) => ({
       file,
-      contentType: resolveContentType(file),
+      contentType: resolveContentType(file.type, file.name),
       uploaded: false,
       done: false,
     }));
@@ -99,7 +79,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
       files.map((file) => ({
         name: file.name,
         size: file.size,
-        contentType: resolveContentType(file),
+        contentType: resolveContentType(file.type, file.name),
         state: "pending",
       })),
     );
