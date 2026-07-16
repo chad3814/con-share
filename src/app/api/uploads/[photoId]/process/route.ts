@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { AuthError, requireUser } from "@/lib/auth-helpers";
 import { isAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
-import { getObjectBytes, publicUrl, putObject } from "@/lib/s3";
+import { deleteObjects, getObjectBytes, publicUrl, putObject } from "@/lib/s3";
 import { processImage } from "@/lib/image";
 
 export async function POST(
@@ -28,8 +28,8 @@ export async function POST(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  if (photo.status === "READY") {
-    return NextResponse.json({ status: "READY", webUrl: publicUrl(photo.webKey ?? "") });
+  if (photo.status === "READY" && photo.webKey) {
+    return NextResponse.json({ status: "READY", webUrl: publicUrl(photo.webKey) });
   }
 
   const base = photo.originalKey.replace(/\/original\.[^/]+$/, "");
@@ -61,6 +61,11 @@ export async function POST(
 
     return NextResponse.json({ status: updated.status, webUrl: publicUrl(webKey) });
   } catch {
+    try {
+      await deleteObjects([webKey, thumbKey, exifKey]);
+    } catch {
+      /* best-effort */
+    }
     await prisma.photo.update({ where: { id: photo.id }, data: { status: "FAILED" } });
     return NextResponse.json({ error: "Processing failed" }, { status: 500 });
   }
