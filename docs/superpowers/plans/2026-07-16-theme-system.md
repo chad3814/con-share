@@ -16,7 +16,7 @@
 - Dependency: `next-themes@^0.4` (App Router + React 19 compatible).
 - The 14 semantic tokens (exact names): `--background`, `--foreground`, `--card`, `--card-foreground`, `--muted`, `--muted-foreground`, `--border`, `--primary`, `--primary-foreground`, `--accent`, `--accent-foreground`, `--ring`, `--destructive`, `--destructive-foreground`.
 - The 5 theme selectors (exact): `[data-theme="light"]`, `[data-theme="dark"]`, `[data-theme="indigo"]`, `[data-theme="teal"]`, `[data-theme="amber"]` (light values also live in `:root`).
-- All body text must meet WCAG AA (≥4.5:1); large text / UI borders / focus ≥3:1.
+- All body text must meet WCAG AA (≥4.5:1); large text and focus indicators ≥3:1; borders need 3:1 only when they are the sole indicator of a control (decorative borders/dividers exempt).
 - A commit is only allowed after `npm run check` (lint + typecheck + test + build) passes — enforced by the husky pre-commit hook. Never push without explicit approval.
 
 ## Migration Mapping (old → new)
@@ -207,9 +207,9 @@ Replace the entire contents of `src/app/globals.css` with:
   --muted: #e6f7f4;
   --muted-foreground: #475569;
   --border: #cbd5e1;
-  --primary: #0d9488;
+  --primary: #0f766e;
   --primary-foreground: #ffffff;
-  --accent: #0d9488;
+  --accent: #0f766e;
   --accent-foreground: #ffffff;
   --ring: #0d9488;
   --destructive: #dc2626;
@@ -222,7 +222,7 @@ Replace the entire contents of `src/app/globals.css` with:
   --card: #fffef9;
   --card-foreground: #1c1917;
   --muted: #f5ede0;
-  --muted-foreground: #78716c;
+  --muted-foreground: #57534e;
   --border: #ecdfce;
   --primary: #b45309;
   --primary-foreground: #fffbf5;

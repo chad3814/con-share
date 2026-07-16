@@ -70,10 +70,11 @@ mapped accordingly.
 
 Starting palettes below. Exact values are finalized during implementation and
 each theme is verified against WCAG AA (≥4.5:1 for body text; ≥3:1 for large
-text and UI borders/focus). Values live in `globals.css`: `:root` holds the
-light palette, and `[data-theme="dark|indigo|teal|amber"]` blocks override.
-A redundant `[data-theme="light"]` block reaffirms light because next-themes
-always sets the attribute explicitly.
+text and focus indicators; borders need 3:1 only when they are the sole indicator
+of a control, decorative borders/dividers exempt). Values live in `globals.css`:
+`:root` holds the light palette, and `[data-theme="dark|indigo|teal|amber"]`
+blocks override. A redundant `[data-theme="light"]` block reaffirms light because
+next-themes always sets the attribute explicitly.
 
 **Light** (neutral)
 - background `#ffffff`, foreground `#171717`
@@ -110,15 +111,15 @@ always sets the attribute explicitly.
 - card `#ffffff`, card-foreground `#0f172a`
 - muted `#e6f7f4`, muted-foreground `#475569`
 - border `#cbd5e1`
-- primary `#0d9488`, primary-foreground `#ffffff`
-- accent `#0d9488`, accent-foreground `#ffffff`
+- primary `#0f766e`, primary-foreground `#ffffff`
+- accent `#0f766e`, accent-foreground `#ffffff`
 - ring `#0d9488`
 - destructive `#dc2626`, destructive-foreground `#ffffff`
 
 **Amber** (warm paper light, amber accent)
 - background `#fffbf5`, foreground `#1c1917`
 - card `#fffef9`, card-foreground `#1c1917`
-- muted `#f5ede0`, muted-foreground `#78716c`
+- muted `#f5ede0`, muted-foreground `#57534e`
 - border `#ecdfce`
 - primary `#b45309`, primary-foreground `#fffbf5`
 - accent `#b45309`, accent-foreground `#fffbf5`
