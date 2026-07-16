@@ -7,13 +7,23 @@ const createPrismaClient = () => {
   return new PrismaClient({ adapter });
 };
 
+type PrismaClientSingleton = ReturnType<typeof createPrismaClient>;
+
 // eslint-disable-next-line no-restricted-syntax
-const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createPrismaClient> | undefined;
-};
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClientSingleton };
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+// Lazily constructed: importing this module never builds a PrismaClient
+// (which would read env vars and open a connection). The client is only
+// created on first property access, then cached on the dev global.
+function getPrismaClient(): PrismaClientSingleton {
+  globalForPrisma.prisma ??= createPrismaClient();
+  return globalForPrisma.prisma;
 }
+
+export const prisma = new Proxy({} as PrismaClientSingleton, {
+  get(_target, prop) {
+    const client = getPrismaClient();
+    const value = client[prop as keyof PrismaClientSingleton];
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});

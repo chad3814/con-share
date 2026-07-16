@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import type { ReportInput } from "@/lib/validation/report";
 
 export const IP_REPORT_CAP = 10;
@@ -17,8 +18,6 @@ export async function createReport(
   input: ReportInput,
   reporter: { userId?: string; ip?: string },
 ): Promise<void> {
-  const { prisma } = await import("@/lib/prisma");
-
   const photo = await prisma.photo.findUnique({
     where: { id: photoId },
     select: { id: true },
@@ -63,7 +62,6 @@ export async function createReport(
 }
 
 export async function listOpenReports() {
-  const { prisma } = await import("@/lib/prisma");
   return prisma.report.findMany({
     where: { status: "OPEN" },
     orderBy: { createdAt: "asc" },
