@@ -55,7 +55,7 @@ export default async function MePage() {
       {mapped.length === 0 ? (
         <p className="text-muted-foreground">
           You haven&apos;t uploaded any photos yet.{" "}
-          <Link href="/upload" className="text-blue-600 underline">
+          <Link href="/upload" className="text-accent underline">
             Upload some
           </Link>
           .

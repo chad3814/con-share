@@ -216,7 +216,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         type="button"
         onClick={handleUpload}
         disabled={uploadDisabled}
-        className="w-full rounded bg-primary py-2 text-sm text-primary-foreground disabled:bg-muted"
+        className="w-full rounded bg-primary py-2 text-sm text-primary-foreground disabled:bg-muted disabled:text-muted-foreground"
       >
         Upload
       </button>

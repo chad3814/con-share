@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
   --card: #ffffff;
@@ -18,6 +19,7 @@
 }
 
 [data-theme="light"] {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
   --card: #ffffff;
@@ -35,6 +37,7 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --background: #0a0a0a;
   --foreground: #ededed;
   --card: #171717;
@@ -52,6 +55,7 @@
 }
 
 [data-theme="indigo"] {
+  color-scheme: dark;
   --background: #1e1b2e;
   --foreground: #ede9fe;
   --card: #2a2540;
@@ -69,6 +73,7 @@
 }
 
 [data-theme="teal"] {
+  color-scheme: light;
   --background: #f0fdfa;
   --foreground: #0f172a;
   --card: #ffffff;
@@ -86,6 +91,7 @@
 }
 
 [data-theme="amber"] {
+  color-scheme: light;
   --background: #fffbf5;
   --foreground: #1c1917;
   --card: #fffef9;
