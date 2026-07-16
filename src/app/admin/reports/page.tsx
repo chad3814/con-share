@@ -10,7 +10,7 @@ export default async function AdminReportsPage() {
     <section className="space-y-4">
       <h1 className="text-xl font-semibold">Moderation queue</h1>
       {reports.length === 0 ? (
-        <p className="text-gray-500">No open reports.</p>
+        <p className="text-muted-foreground">No open reports.</p>
       ) : (
         <ul className="space-y-4">
           {reports.map((report) => {
@@ -18,7 +18,7 @@ export default async function AdminReportsPage() {
             const reporterLabel =
               report.reporter?.displayName ?? report.reporter?.email ?? "Anonymous";
             return (
-              <li key={report.id} className="rounded border border-gray-200 p-4">
+              <li key={report.id} className="rounded border border-border p-4">
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Link href={photoHref} className="block shrink-0">
                     {report.photo.thumbKey ? (
@@ -28,17 +28,17 @@ export default async function AdminReportsPage() {
                         className="h-24 w-24 rounded object-cover"
                       />
                     ) : (
-                      <span className="flex h-24 w-24 items-center justify-center rounded bg-gray-100 p-2 text-center text-xs text-gray-500">
+                      <span className="flex h-24 w-24 items-center justify-center rounded bg-muted p-2 text-center text-xs text-muted-foreground">
                         no preview (status: {report.photo.status})
                       </span>
                     )}
                   </Link>
                   <div className="flex-1 space-y-1 text-sm">
                     <p className="font-medium">{report.photo.convention.name}</p>
-                    <p className="text-gray-700">Category: {report.category}</p>
-                    {report.message ? <p className="text-gray-700">{report.message}</p> : null}
-                    <p className="text-gray-500">Reporter: {reporterLabel}</p>
-                    <p className="text-gray-500">
+                    <p className="text-foreground">Category: {report.category}</p>
+                    {report.message ? <p className="text-foreground">{report.message}</p> : null}
+                    <p className="text-muted-foreground">Reporter: {reporterLabel}</p>
+                    <p className="text-muted-foreground">
                       Reported: {report.createdAt.toLocaleString()}
                     </p>
                   </div>
@@ -51,11 +51,11 @@ export default async function AdminReportsPage() {
                     <input
                       name="reason"
                       placeholder="Reason (optional)"
-                      className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm"
+                      className="flex-1 rounded border border-border px-2 py-1 text-sm"
                     />
                     <button
                       type="submit"
-                      className="whitespace-nowrap rounded bg-red-700 px-3 py-1.5 text-sm text-white"
+                      className="whitespace-nowrap rounded bg-destructive px-3 py-1.5 text-sm text-destructive-foreground"
                     >
                       Take down photo
                     </button>
@@ -67,11 +67,11 @@ export default async function AdminReportsPage() {
                     <input
                       name="note"
                       placeholder="Note (optional)"
-                      className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm"
+                      className="flex-1 rounded border border-border px-2 py-1 text-sm"
                     />
                     <button
                       type="submit"
-                      className="whitespace-nowrap rounded bg-gray-900 px-3 py-1.5 text-sm text-white"
+                      className="whitespace-nowrap rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground"
                     >
                       Dismiss report
                     </button>

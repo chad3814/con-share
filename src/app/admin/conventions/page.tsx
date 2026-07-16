@@ -7,14 +7,14 @@ export default async function AdminConventionsPage() {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Conventions</h1>
-        <Link href="/admin/conventions/new" className="rounded bg-gray-900 px-3 py-1.5 text-sm text-white">
+        <Link href="/admin/conventions/new" className="rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground">
           New convention
         </Link>
       </div>
       {conventions.length === 0 ? (
-        <p className="text-gray-500">No conventions yet.</p>
+        <p className="text-muted-foreground">No conventions yet.</p>
       ) : (
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-border">
           {conventions.map((c) => (
             <li key={c.id} className="flex items-center justify-between py-3">
               <span>{c.name}</span>
