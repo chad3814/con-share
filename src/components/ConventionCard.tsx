@@ -9,7 +9,7 @@ export default function ConventionCard({ convention }: { convention: ConventionL
       href={`/c/${convention.slug}`}
       className="block overflow-hidden rounded-lg border border-border transition hover:border-border"
     >
-      <div className="flex h-32 items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-2xl font-bold text-muted-foreground">
+      <div className="flex h-32 items-center justify-center bg-gradient-to-br from-muted to-border text-2xl font-bold text-muted-foreground">
         {convention.name.slice(0, 1).toUpperCase()}
       </div>
       <div className="space-y-1 p-4">
