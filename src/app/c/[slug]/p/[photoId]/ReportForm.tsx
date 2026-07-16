@@ -14,14 +14,14 @@ export default function ReportForm({ photoId }: { photoId: string }) {
 
   if (submitted) {
     return (
-      <p className="rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+      <p className="rounded border border-border bg-muted p-4 text-sm text-foreground">
         Thanks — this photo has been reported.
       </p>
     );
   }
 
   return (
-    <form action={handle} className="space-y-3 rounded border border-gray-200 p-4">
+    <form action={handle} className="space-y-3 rounded border border-border p-4">
       <h2 className="text-sm font-semibold">Report this photo</h2>
       <div className="space-y-1">
         <label htmlFor="category" className="block text-sm font-medium">
@@ -31,7 +31,7 @@ export default function ReportForm({ photoId }: { photoId: string }) {
           id="category"
           name="category"
           defaultValue="ABUSE"
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         >
           <option value="ABUSE">Abuse</option>
           <option value="COPYRIGHT">Copyright</option>
@@ -46,16 +46,16 @@ export default function ReportForm({ photoId }: { photoId: string }) {
           id="message"
           name="message"
           rows={3}
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         />
       </div>
       <button
         type="submit"
-        className="w-full rounded bg-red-600 px-4 py-2 text-sm font-medium text-white"
+        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground"
       >
         Submit report
       </button>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-muted-foreground">
         Copyright claim? Use the <a href="/dmca" className="underline">DMCA form</a>.
       </p>
     </form>

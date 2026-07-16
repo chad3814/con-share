@@ -30,7 +30,7 @@ export default async function PhotoPage({
   if (photo.status === "TAKEN_DOWN") {
     return (
       <section className="space-y-2 py-12 text-center">
-        <p className="text-gray-600">This photo has been removed.</p>
+        <p className="text-muted-foreground">This photo has been removed.</p>
       </section>
     );
   }
@@ -57,14 +57,14 @@ export default async function PhotoPage({
         />
       ) : null}
 
-      {photo.description ? <p className="text-sm text-gray-800">{photo.description}</p> : null}
+      {photo.description ? <p className="text-sm text-foreground">{photo.description}</p> : null}
 
       {photo.tags.length > 0 ? (
         <ul className="flex flex-wrap gap-2">
           {photo.tags.map(({ tag }) => (
             <li
               key={tag.id}
-              className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700"
+              className="rounded-full bg-muted px-3 py-1 text-xs text-foreground"
             >
               {tag.name}
             </li>
@@ -72,7 +72,7 @@ export default async function PhotoPage({
         </ul>
       ) : null}
 
-      {credit ? <p className="text-sm text-gray-500">Photo by {credit}</p> : null}
+      {credit ? <p className="text-sm text-muted-foreground">Photo by {credit}</p> : null}
 
       <ReportForm photoId={photo.id} />
     </section>

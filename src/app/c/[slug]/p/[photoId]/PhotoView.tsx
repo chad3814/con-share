@@ -21,7 +21,7 @@ export default function PhotoView({
         className="relative block w-full overflow-hidden rounded"
       >
         <img src={webUrl} alt={alt} className="w-full rounded object-contain blur-lg" />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/40 p-4 text-center text-sm font-medium text-white">
+        <span className="absolute inset-0 flex items-center justify-center bg-background/70 p-4 text-center text-sm font-medium text-foreground">
           Sensitive content — tap to reveal
         </span>
       </button>

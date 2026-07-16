@@ -23,12 +23,12 @@ export default async function ConventionGalleryPage({
     <section className="space-y-6">
       <header className="space-y-1">
         <h1 className="text-2xl font-bold">{convention.name}</h1>
-        {range ? <p className="text-gray-600">{range}</p> : null}
+        {range ? <p className="text-muted-foreground">{range}</p> : null}
         {convention.location ? (
-          <p className="text-gray-600">{convention.location}</p>
+          <p className="text-muted-foreground">{convention.location}</p>
         ) : null}
         {convention.description ? (
-          <p className="text-gray-600">{convention.description}</p>
+          <p className="text-muted-foreground">{convention.description}</p>
         ) : null}
         <NsfwToggle initial={showNsfw} />
       </header>

@@ -17,14 +17,14 @@ export default function DmcaForm() {
 
   if (state.ok) {
     return (
-      <p className="rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+      <p className="rounded border border-border bg-muted p-4 text-sm text-foreground">
         Your takedown notice has been submitted.
       </p>
     );
   }
 
   return (
-    <form action={formAction} className="space-y-3 rounded border border-gray-200 p-4">
+    <form action={formAction} className="space-y-3 rounded border border-border p-4">
       <div className="space-y-1">
         <label htmlFor="photoUrl" className="block text-sm font-medium">
           Photo URL
@@ -35,7 +35,7 @@ export default function DmcaForm() {
           type="text"
           required
           placeholder="https://con-share.example/c/some-con/p/abc123"
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         />
       </div>
       <div className="space-y-1">
@@ -47,7 +47,7 @@ export default function DmcaForm() {
           name="complainantName"
           type="text"
           required
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         />
       </div>
       <div className="space-y-1">
@@ -59,7 +59,7 @@ export default function DmcaForm() {
           name="contactEmail"
           type="email"
           required
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         />
       </div>
       <div className="space-y-1">
@@ -71,7 +71,7 @@ export default function DmcaForm() {
           name="claim"
           rows={5}
           required
-          className="w-full rounded border border-gray-300 p-2 text-sm"
+          className="w-full rounded border border-border p-2 text-sm"
         />
       </div>
       <div className="flex items-start gap-2">
@@ -96,7 +96,7 @@ export default function DmcaForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded bg-red-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50"
       >
         {isPending ? "Submitting…" : "Submit takedown notice"}
       </button>

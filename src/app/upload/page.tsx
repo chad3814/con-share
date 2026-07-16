@@ -14,7 +14,7 @@ export default async function UploadPage() {
     <section className="space-y-4">
       <h1 className="text-xl font-semibold">Upload photos</h1>
       {conventions.length === 0 ? (
-        <p className="text-gray-500">No conventions yet — an admin needs to create one.</p>
+        <p className="text-muted-foreground">No conventions yet — an admin needs to create one.</p>
       ) : (
         <Uploader conventions={conventions} />
       )}

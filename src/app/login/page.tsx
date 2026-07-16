@@ -10,7 +10,7 @@ export default function LoginPage() {
           await signIn("github", { redirectTo: "/" });
         }}
       >
-        <button type="submit" className="w-full rounded border border-gray-300 py-2">
+        <button type="submit" className="w-full rounded border border-border py-2">
           Continue with GitHub
         </button>
       </form>
@@ -20,7 +20,7 @@ export default function LoginPage() {
           await signIn("google", { redirectTo: "/" });
         }}
       >
-        <button type="submit" className="w-full rounded border border-gray-300 py-2">
+        <button type="submit" className="w-full rounded border border-border py-2">
           Continue with Google
         </button>
       </form>

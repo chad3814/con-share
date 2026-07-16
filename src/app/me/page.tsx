@@ -44,16 +44,16 @@ export default async function MePage() {
             name="displayName"
             defaultValue={currentUser?.displayName ?? ""}
             required
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+            className="mt-1 w-full rounded border border-border px-3 py-2"
           />
         </label>
-        <button type="submit" className="rounded bg-gray-900 px-4 py-2 text-sm text-white">
+        <button type="submit" className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground">
           Save name
         </button>
       </form>
 
       {mapped.length === 0 ? (
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           You haven&apos;t uploaded any photos yet.{" "}
           <Link href="/upload" className="text-blue-600 underline">
             Upload some

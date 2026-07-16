@@ -191,7 +191,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         <select
           value={conventionId}
           onChange={(event) => setConventionId(event.target.value)}
-          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+          className="mt-1 w-full rounded border border-border px-3 py-2"
         >
           {conventions.map((convention) => (
             <option key={convention.id} value={convention.id}>
@@ -216,13 +216,13 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         type="button"
         onClick={handleUpload}
         disabled={uploadDisabled}
-        className="w-full rounded bg-gray-900 py-2 text-sm text-white disabled:bg-gray-300"
+        className="w-full rounded bg-primary py-2 text-sm text-primary-foreground disabled:bg-muted"
       >
         Upload
       </button>
 
       {items.length > 0 ? (
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-border">
           {items.map((item, index) => (
             <li key={`${item.name}-${index}`} className="flex items-center gap-3 py-3">
               {item.state === "ready" && item.webUrl ? (
@@ -230,14 +230,14 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
               ) : null}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm">{item.name}</p>
-                <p className="text-xs text-gray-500">{item.state}</p>
+                <p className="text-xs text-muted-foreground">{item.state}</p>
                 {item.error ? <p className="text-xs text-red-600">{item.error}</p> : null}
               </div>
               {item.state === "failed" ? (
                 <button
                   type="button"
                   onClick={() => handleRetry(index)}
-                  className="shrink-0 rounded border border-gray-300 px-3 py-1.5 text-sm"
+                  className="shrink-0 rounded border border-border px-3 py-1.5 text-sm"
                 >
                   Retry
                 </button>
