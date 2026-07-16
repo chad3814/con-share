@@ -52,9 +52,9 @@ export async function processImage(input: Buffer): Promise<{
   // metadata().autoOrient, which sharp always populates regardless of
   // .rotate(). Read those so portrait iPhone photos (orientation 5-8, which
   // swap width/height) report correct displayed dims.
-  const rotatedMeta = await sharp(decoded).rotate().metadata();
-  const width = rotatedMeta.autoOrient.width;
-  const height = rotatedMeta.autoOrient.height;
+  const meta = await sharp(decoded).metadata();
+  const width = meta.autoOrient.width;
+  const height = meta.autoOrient.height;
 
   const web = await sharp(decoded)
     .rotate() // apply EXIF orientation before stripping
