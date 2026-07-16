@@ -29,6 +29,7 @@ export default async function MePage() {
     photographerCredit: photo.photographerCredit,
     conventionName: photo.convention.name,
     thumbUrl: photo.status === "READY" && photo.thumbKey ? publicUrl(photo.thumbKey) : null,
+    takedownReason: photo.takedownReason,
     tags: photo.tags.map((t) => t.tag.name),
   }));
 
