@@ -11,6 +11,8 @@ const base: ConventionListItem = {
   startDate: new Date("2026-07-01T00:00:00Z"),
   endDate: null,
   bannerKey: null,
+  logoKey: null,
+  url: null,
   createdById: "u1",
   createdAt: new Date("2026-01-01T00:00:00Z"),
   updatedAt: new Date("2026-01-01T00:00:00Z"),

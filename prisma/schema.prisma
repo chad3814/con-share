@@ -82,6 +82,8 @@ model Convention {
   startDate   DateTime?
   endDate     DateTime?
   bannerKey   String?
+  logoKey     String?
+  url         String?
   createdById String
   createdBy   User      @relation("ConventionCreatedBy", fields: [createdById], references: [id])
   photos      Photo[]
