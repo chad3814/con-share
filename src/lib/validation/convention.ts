@@ -16,6 +16,7 @@ export const conventionInputSchema = z.object({
   location: optionalTrimmed,
   startDate: optionalDate,
   endDate: optionalDate,
+  url: z.preprocess(emptyToUndefined, z.url().optional()),
 });
 
 export type ConventionInput = z.infer<typeof conventionInputSchema>;

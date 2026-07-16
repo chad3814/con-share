@@ -17,4 +17,15 @@ describe("parseConventionInput", () => {
     const result = parseConventionInput({ name: "Con", startDate: "2026-07-01" });
     expect(result.startDate instanceof Date).toBe(true);
   });
+  it("accepts a valid url", () => {
+    const result = parseConventionInput({ name: "Con", url: "https://example.com" });
+    expect(result.url).toBe("https://example.com");
+  });
+  it("treats an empty url as undefined", () => {
+    const result = parseConventionInput({ name: "Con", url: "" });
+    expect(result.url).toBeUndefined();
+  });
+  it("throws on an invalid url", () => {
+    expect(() => parseConventionInput({ name: "Con", url: "notaurl" })).toThrow();
+  });
 });

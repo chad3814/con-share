@@ -20,7 +20,7 @@ vi.hoisted(() => {
   process.env.S3_SECRET_ACCESS_KEY ??= "test-secret-access-key";
 });
 
-import { photoKeys, photoKeysFromOriginal, extForContentType, publicUrl } from "@/lib/s3";
+import { photoKeys, photoKeysFromOriginal, extForContentType, publicUrl, conventionLogoKey } from "@/lib/s3";
 
 describe("photoKeys", () => {
   it("builds the four keys under the convention/photo prefix", () => {
@@ -55,6 +55,12 @@ describe("extForContentType", () => {
   });
   it("throws on unsupported types", () => {
     expect(() => extForContentType("image/gif")).toThrow();
+  });
+});
+
+describe("conventionLogoKey", () => {
+  it("builds the logo key under the convention prefix", () => {
+    expect(conventionLogoKey("c1")).toBe("conventions/c1/logo.webp");
   });
 });
 
