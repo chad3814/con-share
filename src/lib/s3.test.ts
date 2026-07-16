@@ -20,7 +20,7 @@ vi.hoisted(() => {
   process.env.S3_SECRET_ACCESS_KEY ??= "test-secret-access-key";
 });
 
-import { photoKeys, extForContentType, publicUrl } from "@/lib/s3";
+import { photoKeys, photoKeysFromOriginal, extForContentType, publicUrl } from "@/lib/s3";
 
 describe("photoKeys", () => {
   it("builds the four keys under the convention/photo prefix", () => {
@@ -29,6 +29,22 @@ describe("photoKeys", () => {
     expect(k.exif).toBe("conventions/con1/photos/ph1/metadata.exif");
     expect(k.web).toBe("conventions/con1/photos/ph1/web.webp");
     expect(k.thumb).toBe("conventions/con1/photos/ph1/thumb.webp");
+  });
+});
+
+describe("photoKeysFromOriginal", () => {
+  it("derives the four keys from a well-formed original key", () => {
+    const k = photoKeysFromOriginal("conventions/c1/photos/p1/original.jpg");
+    expect(k).toEqual({
+      original: "conventions/c1/photos/p1/original.jpg",
+      exif: "conventions/c1/photos/p1/metadata.exif",
+      web: "conventions/c1/photos/p1/web.webp",
+      thumb: "conventions/c1/photos/p1/thumb.webp",
+    });
+  });
+
+  it("returns null for a malformed key", () => {
+    expect(photoKeysFromOriginal("no-original-here")).toBeNull();
   });
 });
 

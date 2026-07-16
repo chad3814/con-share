@@ -44,6 +44,17 @@ vi.mock("@/lib/tags", () => ({
 
 vi.mock("@/lib/s3", () => ({
   deleteObjects: vi.fn(),
+  photoKeysFromOriginal: vi.fn((originalKey: string) => {
+    const match = originalKey.match(/^(.*)\/original\.[^/]+$/);
+    if (!match) return null;
+    const base = match[1];
+    return {
+      original: originalKey,
+      exif: `${base}/metadata.exif`,
+      web: `${base}/web.webp`,
+      thumb: `${base}/thumb.webp`,
+    };
+  }),
 }));
 
 vi.mock("next/cache", () => ({

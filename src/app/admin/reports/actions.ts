@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
-import { deleteObjects } from "@/lib/s3";
+import { deleteObjects, photoKeysFromOriginal } from "@/lib/s3";
 
 function optionalText(value: FormDataEntryValue | null): string | null {
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
@@ -38,11 +38,13 @@ export async function takedownPhotoAction(photoId: string, formData: FormData): 
   // The DB takedown above is authoritative (gallery/single-photo already hide
   // this photo), so a failed derivative delete is best-effort cleanup, not a
   // correctness failure — revalidation must still run.
-  const base = photo.originalKey.replace(/\/original\.[^/]+$/, "");
-  try {
-    await deleteObjects([`${base}/web.webp`, `${base}/thumb.webp`]);
-  } catch (error) {
-    console.error("takedown: failed to delete public derivatives", { photoId: photo.id, error });
+  const keys = photoKeysFromOriginal(photo.originalKey);
+  if (keys) {
+    try {
+      await deleteObjects([keys.web, keys.thumb]);
+    } catch (error) {
+      console.error("takedown: failed to delete public derivatives", { photoId: photo.id, error });
+    }
   }
 
   revalidatePath("/admin/reports");

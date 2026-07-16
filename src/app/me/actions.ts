@@ -6,7 +6,7 @@ import { AuthError, requireUser, type SessionUser } from "@/lib/auth-helpers";
 import { isAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { setPhotoTags } from "@/lib/tags";
-import { deleteObjects } from "@/lib/s3";
+import { deleteObjects, photoKeysFromOriginal } from "@/lib/s3";
 
 const photoMetaSchema = z.object({
   description: z.string().trim().max(2000).optional(),
@@ -65,9 +65,10 @@ export async function setPublishedAction(photoId: string, published: boolean): P
 export async function deletePhotoAction(photoId: string): Promise<void> {
   const user = await requireUser();
   const photo = await loadOwnedPhoto(photoId, user);
-  const base = photo.originalKey.replace(/\/original\.[^/]+$/, "");
-  const keys = [photo.originalKey, `${base}/metadata.exif`, `${base}/web.webp`, `${base}/thumb.webp`];
-  await deleteObjects(keys);
+  const keys = photoKeysFromOriginal(photo.originalKey);
+  if (keys) {
+    await deleteObjects([keys.original, keys.exif, keys.web, keys.thumb]);
+  }
   await prisma.photo.delete({ where: { id: photo.id } }); // PhotoTag rows cascade
   revalidatePhotoPaths(photo.convention.slug);
 }

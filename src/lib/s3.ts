@@ -34,6 +34,20 @@ export function photoKeys(conventionId: string, photoId: string, originalExt: st
   };
 }
 
+export function photoKeysFromOriginal(
+  originalKey: string,
+): { original: string; exif: string; web: string; thumb: string } | null {
+  const match = originalKey.match(/^(.*)\/original\.[^/]+$/);
+  if (!match) return null;
+  const base = match[1];
+  return {
+    original: originalKey,
+    exif: `${base}/metadata.exif`,
+    web: `${base}/web.webp`,
+    thumb: `${base}/thumb.webp`,
+  };
+}
+
 export function publicUrl(key: string): string {
   return `https://${env.S3_BUCKET}.s3.${env.S3_REGION}.amazonaws.com/${key}`;
 }
