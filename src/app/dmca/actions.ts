@@ -19,8 +19,8 @@ const dmcaInputSchema = z.object({
     z.string().trim().min(1, "Please provide your name."),
   ),
   contactEmail: z.preprocess(
-    toStringField,
-    z.string().trim().email("Please provide a valid email address."),
+    (v: FormDataEntryValue | null) => toStringField(v).trim(),
+    z.email("Please provide a valid email address."),
   ),
   claim: z.preprocess(
     toStringField,

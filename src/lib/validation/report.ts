@@ -11,7 +11,7 @@ export const reportInputSchema = z.object({
   ),
   contactEmail: z.preprocess(
     emptyToUndefined,
-    z.string().email().optional(),
+    z.email().optional(),
   ),
 });
 

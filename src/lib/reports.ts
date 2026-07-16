@@ -19,6 +19,12 @@ export async function createReport(
 ): Promise<void> {
   const { prisma } = await import("@/lib/prisma");
 
+  const photo = await prisma.photo.findUnique({
+    where: { id: photoId },
+    select: { id: true },
+  });
+  if (!photo) return;
+
   // dedupe: an OPEN report already from this reporter (user or ip) for this photo?
   const dedupeFilters = [
     ...(reporter.userId ? [{ reporterUserId: reporter.userId }] : []),
