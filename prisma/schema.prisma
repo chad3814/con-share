@@ -27,6 +27,9 @@ model User {
   createdAt          DateTime     @default(now())
   conventionsCreated Convention[] @relation("ConventionCreatedBy")
   photos             Photo[]      @relation("PhotoUploader")
+  reportsMade        Report[]     @relation("ReportReporter")
+  reportsResolved    Report[]     @relation("ReportResolver")
+  auditLogs          AuditLog[]   @relation("AuditActor")
 }
 
 model Account {
@@ -110,6 +113,7 @@ model Photo {
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
   tags               PhotoTag[]
+  reports            Report[]
 
   @@index([conventionId, published, status])
 }
@@ -129,4 +133,49 @@ model PhotoTag {
 
   @@id([photoId, tagId])
   @@index([tagId])
+}
+
+enum ReportCategory {
+  ABUSE
+  COPYRIGHT
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+model Report {
+  id             String         @id @default(cuid())
+  photoId        String
+  photo          Photo          @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  reporterUserId String?
+  reporter       User?          @relation("ReportReporter", fields: [reporterUserId], references: [id])
+  reporterIp     String?
+  category       ReportCategory
+  message        String?
+  contactEmail   String?
+  status         ReportStatus   @default(OPEN)
+  resolvedById   String?
+  resolvedBy     User?          @relation("ReportResolver", fields: [resolvedById], references: [id])
+  resolvedAt     DateTime?
+  resolutionNote String?
+  createdAt      DateTime       @default(now())
+
+  @@index([status, createdAt])
+  @@index([photoId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String
+  actor     User     @relation("AuditActor", fields: [actorId], references: [id])
+  photoId   String?
+  action    String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
