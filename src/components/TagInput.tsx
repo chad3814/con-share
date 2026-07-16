@@ -75,18 +75,18 @@ export default function TagInput({ name, defaultValue }: TagInputProps) {
   return (
     <div className="w-full">
       <input type="hidden" name={name} value={tags.join(",")} />
-      <div className="flex flex-wrap gap-2 rounded-md border border-gray-300 p-2">
+      <div className="flex flex-wrap gap-2 rounded-md border border-border p-2">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
+            className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-foreground"
           >
             {tag}
             <button
               type="button"
               onClick={() => removeTag(tag)}
               aria-label={`Remove tag ${tag}`}
-              className="text-gray-400 hover:text-gray-700"
+              className="text-muted-foreground hover:text-foreground"
             >
               ×
             </button>
@@ -102,13 +102,13 @@ export default function TagInput({ name, defaultValue }: TagInputProps) {
         />
       </div>
       {suggestions.length > 0 ? (
-        <ul className="mt-1 max-h-48 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-sm">
+        <ul className="mt-1 max-h-48 overflow-y-auto rounded-md border border-border bg-card shadow-sm">
           {suggestions.map((suggestion) => (
             <li key={suggestion}>
               <button
                 type="button"
                 onClick={() => addTag(suggestion)}
-                className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100"
+                className="block w-full px-3 py-2 text-left text-sm hover:bg-muted"
               >
                 {suggestion}
               </button>

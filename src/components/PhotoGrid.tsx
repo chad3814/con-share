@@ -17,7 +17,7 @@ export default function PhotoGrid({
 }) {
   if (photos.length === 0) {
     return (
-      <p className="py-12 text-center text-gray-500">
+      <p className="py-12 text-center text-muted-foreground">
         No photos have been shared yet.
       </p>
     );

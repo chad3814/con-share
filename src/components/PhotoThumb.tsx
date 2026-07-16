@@ -26,7 +26,7 @@ export default function PhotoThumb({
           loading="lazy"
           className="aspect-square w-full rounded object-cover blur-lg"
         />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/40 p-2 text-center text-sm font-medium text-white">
+        <span className="absolute inset-0 flex items-center justify-center bg-primary/40 p-2 text-center text-sm font-medium text-primary-foreground">
           Sensitive content — tap to reveal
         </span>
       </button>

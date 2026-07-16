@@ -21,7 +21,7 @@ export default function NsfwToggle({ initial }: { initial: boolean }) {
   }
 
   return (
-    <label className="flex items-center gap-2 text-sm text-gray-600">
+    <label className="flex items-center gap-2 text-sm text-muted-foreground">
       <input
         type="checkbox"
         checked={checked}
