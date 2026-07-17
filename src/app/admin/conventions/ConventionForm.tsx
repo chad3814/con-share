@@ -53,7 +53,7 @@ export default function ConventionForm({
         <span className="text-sm font-medium">Logo (optional)</span>
         <input type="file" name="logo" accept="image/jpeg,image/png,image/webp" className="mt-1 w-full text-sm" />
       </label>
-      <button type="submit" className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground">{submitLabel}</button>
+      <button type="submit" className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80">{submitLabel}</button>
     </form>
   );
 }

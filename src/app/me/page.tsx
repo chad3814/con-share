@@ -47,7 +47,7 @@ export default async function MePage() {
             className="mt-1 w-full rounded border border-border px-3 py-2"
           />
         </label>
-        <button type="submit" className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground">
+        <button type="submit" className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80">
           Save name
         </button>
       </form>

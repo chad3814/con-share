@@ -6,7 +6,7 @@ import { publicUrl } from "@/lib/s3";
 export default function ConventionCard({ convention }: { convention: ConventionListItem }) {
   const range = formatDateRange(convention.startDate, convention.endDate);
   return (
-    <div className="relative overflow-hidden rounded-lg border border-border transition hover:border-border">
+    <div className="relative overflow-hidden rounded-lg border border-border transition-colors hover:border-muted-foreground">
       <Link href={`/c/${convention.slug}`} className="block">
         {convention.logoKey ? (
           <img

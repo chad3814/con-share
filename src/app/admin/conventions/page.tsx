@@ -7,7 +7,7 @@ export default async function AdminConventionsPage() {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Conventions</h1>
-        <Link href="/admin/conventions/new" className="rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground">
+        <Link href="/admin/conventions/new" className="rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80">
           New convention
         </Link>
       </div>

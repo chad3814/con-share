@@ -216,7 +216,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
         type="button"
         onClick={handleUpload}
         disabled={uploadDisabled}
-        className="w-full rounded bg-primary py-2 text-sm text-primary-foreground disabled:bg-muted disabled:text-muted-foreground"
+        className="w-full rounded bg-primary py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80 disabled:bg-muted disabled:text-muted-foreground"
       >
         Upload
       </button>
@@ -237,7 +237,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
                 <button
                   type="button"
                   onClick={() => handleRetry(index)}
-                  className="shrink-0 rounded border border-border px-3 py-1.5 text-sm"
+                  className="shrink-0 rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-muted active:bg-border"
                 >
                   Retry
                 </button>

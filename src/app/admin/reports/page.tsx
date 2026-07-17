@@ -55,7 +55,7 @@ export default async function AdminReportsPage() {
                     />
                     <button
                       type="submit"
-                      className="whitespace-nowrap rounded bg-destructive px-3 py-1.5 text-sm text-destructive-foreground"
+                      className="whitespace-nowrap rounded bg-destructive px-3 py-1.5 text-sm text-destructive-foreground transition-colors hover:bg-destructive/90 active:bg-destructive/80"
                     >
                       Take down photo
                     </button>
@@ -71,7 +71,7 @@ export default async function AdminReportsPage() {
                     />
                     <button
                       type="submit"
-                      className="whitespace-nowrap rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground"
+                      className="whitespace-nowrap rounded bg-primary px-3 py-1.5 text-sm text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80"
                     >
                       Dismiss report
                     </button>

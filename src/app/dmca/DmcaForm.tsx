@@ -96,7 +96,7 @@ export default function DmcaForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50"
+        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 active:bg-destructive/80 disabled:opacity-50"
       >
         {isPending ? "Submitting…" : "Submit takedown notice"}
       </button>

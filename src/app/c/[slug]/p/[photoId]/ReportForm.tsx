@@ -51,7 +51,7 @@ export default function ReportForm({ photoId }: { photoId: string }) {
       </div>
       <button
         type="submit"
-        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground"
+        className="w-full rounded bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 active:bg-destructive/80"
       >
         Submit report
       </button>
