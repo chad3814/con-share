@@ -17,6 +17,8 @@ const TOKENS = [
   "--ring",
   "--destructive",
   "--destructive-foreground",
+  "--destructive-muted",
+  "--destructive-muted-foreground",
 ];
 
 const SELECTORS = [
@@ -38,6 +40,18 @@ function blockFor(selector: string): string {
   return css.slice(open + 1, close);
 }
 
+function tokenMap(selector: string): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const decl of blockFor(selector).split(";")) {
+    const [rawName, ...rest] = decl.split(":");
+    const name = rawName.trim();
+    if (name.startsWith("--")) {
+      map[name] = rest.join(":").trim();
+    }
+  }
+  return map;
+}
+
 describe("theme token completeness", () => {
   for (const selector of SELECTORS) {
     it(`${selector} defines every semantic token`, () => {
@@ -48,4 +62,8 @@ describe("theme token completeness", () => {
       }
     });
   }
+
+  it(':root matches [data-theme="light"] token-for-token (no-JS fallback parity)', () => {
+    expect(tokenMap(":root")).toEqual(tokenMap('[data-theme="light"]'));
+  });
 });

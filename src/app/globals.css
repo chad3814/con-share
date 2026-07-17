@@ -16,6 +16,8 @@
   --ring: #4f46e5;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
+  --destructive-muted: #fee2e2;
+  --destructive-muted-foreground: #b91c1c;
 }
 
 [data-theme="light"] {
@@ -34,6 +36,8 @@
   --ring: #4f46e5;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
+  --destructive-muted: #fee2e2;
+  --destructive-muted-foreground: #b91c1c;
 }
 
 [data-theme="dark"] {
@@ -52,6 +56,8 @@
   --ring: #818cf8;
   --destructive: #ef4444;
   --destructive-foreground: #0a0a0a;
+  --destructive-muted: #450a0a;
+  --destructive-muted-foreground: #fca5a5;
 }
 
 [data-theme="indigo"] {
@@ -70,6 +76,8 @@
   --ring: #a78bfa;
   --destructive: #f87171;
   --destructive-foreground: #1e1b2e;
+  --destructive-muted: #6b1d3a;
+  --destructive-muted-foreground: #fecdd3;
 }
 
 [data-theme="teal"] {
@@ -88,6 +96,8 @@
   --ring: #0d9488;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
+  --destructive-muted: #fee2e2;
+  --destructive-muted-foreground: #b91c1c;
 }
 
 [data-theme="amber"] {
@@ -106,6 +116,8 @@
   --ring: #d97706;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
+  --destructive-muted: #fee2e2;
+  --destructive-muted-foreground: #b91c1c;
 }
 
 @theme inline {
@@ -123,6 +135,19 @@
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-muted: var(--destructive-muted);
+  --color-destructive-muted-foreground: var(--destructive-muted-foreground);
+}
+
+@layer base {
+  /* Keyboard focus affordance using the per-theme --ring token. Uses an
+     outline (not a box-shadow ring) so it is not clipped by overflow-hidden
+     ancestors like ConventionCard. :where() keeps specificity at 0 so a
+     component can still override the focus style if it needs to. */
+  :where(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 body {

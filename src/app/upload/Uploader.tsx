@@ -231,7 +231,7 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm">{item.name}</p>
                 <p className="text-xs text-muted-foreground">{item.state}</p>
-                {item.error ? <p className="text-xs text-red-600">{item.error}</p> : null}
+                {item.error ? <p className="text-xs text-destructive">{item.error}</p> : null}
               </div>
               {item.state === "failed" ? (
                 <button

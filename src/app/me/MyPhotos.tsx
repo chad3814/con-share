@@ -33,7 +33,7 @@ function StatusChip({ status }: { status: string }) {
 
 function TakenDownBadge() {
   return (
-    <span className="inline-block rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+    <span className="inline-block rounded-full bg-destructive-muted px-2 py-0.5 text-xs font-medium text-destructive-muted-foreground">
       Taken down
     </span>
   );
@@ -72,7 +72,7 @@ function PhotoRow({ photo }: { photo: MyPhoto }) {
       </div>
 
       {isTakenDown ? (
-        <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="rounded bg-destructive-muted px-3 py-2 text-sm text-destructive-muted-foreground">
           {photo.takedownReason ?? "No reason provided"}
         </p>
       ) : (
@@ -118,7 +118,7 @@ function PhotoRow({ photo }: { photo: MyPhoto }) {
             <button
               type="submit"
               onClick={confirmDelete}
-              className="rounded border border-red-300 px-3 py-1.5 text-sm text-red-700"
+              className="rounded border border-destructive px-3 py-1.5 text-sm text-destructive transition-colors hover:bg-destructive/10 active:bg-destructive/20"
             >
               Delete
             </button>
