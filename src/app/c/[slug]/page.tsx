@@ -6,6 +6,8 @@ import { getConventionBySlug, getPublishedPhotos } from "@/lib/conventions";
 import { formatDateRange } from "@/lib/date";
 import { SHOW_NSFW_COOKIE, showNsfwFromCookie } from "@/lib/nsfw";
 import { publicUrl } from "@/lib/s3";
+import { getCurrentUser } from "@/lib/auth-helpers";
+import ConventionUploadPanel from "@/components/ConventionUploadPanel";
 
 export default async function ConventionGalleryPage({
   params,
@@ -19,6 +21,7 @@ export default async function ConventionGalleryPage({
   const range = formatDateRange(convention.startDate, convention.endDate);
   const cookieStore = await cookies();
   const showNsfw = showNsfwFromCookie(cookieStore.get(SHOW_NSFW_COOKIE)?.value);
+  const user = await getCurrentUser();
 
   return (
     <section className="space-y-6">
@@ -52,6 +55,12 @@ export default async function ConventionGalleryPage({
         ) : null}
         <NsfwToggle initial={showNsfw} />
       </header>
+      {user ? (
+        <ConventionUploadPanel
+          conventionId={convention.id}
+          conventionName={convention.name}
+        />
+      ) : null}
       <PhotoGrid
         photos={await getPublishedPhotos(convention.id)}
         showNsfw={showNsfw}
