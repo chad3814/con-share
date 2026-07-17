@@ -55,8 +55,16 @@ async function runPool<T>(
   await Promise.all(workers);
 }
 
-export default function Uploader({ conventions }: { conventions: ConventionOption[] }) {
-  const [conventionId, setConventionId] = useState<string>(conventions[0]?.id ?? "");
+export default function Uploader({
+  conventions = [],
+  fixedConventionId,
+}: {
+  conventions?: ConventionOption[];
+  fixedConventionId?: string;
+}) {
+  const [conventionId, setConventionId] = useState<string>(
+    fixedConventionId ?? conventions[0]?.id ?? "",
+  );
   const [items, setItems] = useState<FileItem[]>([]);
   const [batchInFlight, setBatchInFlight] = useState(false);
   const entriesRef = useRef<FileEntry[]>([]);
@@ -186,20 +194,22 @@ export default function Uploader({ conventions }: { conventions: ConventionOptio
 
   return (
     <div className="space-y-4">
-      <label className="block">
-        <span className="text-sm font-medium">Convention</span>
-        <select
-          value={conventionId}
-          onChange={(event) => setConventionId(event.target.value)}
-          className="mt-1 w-full rounded border border-border px-3 py-2"
-        >
-          {conventions.map((convention) => (
-            <option key={convention.id} value={convention.id}>
-              {convention.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      {!fixedConventionId ? (
+        <label className="block">
+          <span className="text-sm font-medium">Convention</span>
+          <select
+            value={conventionId}
+            onChange={(event) => setConventionId(event.target.value)}
+            className="mt-1 w-full rounded border border-border px-3 py-2"
+          >
+            {conventions.map((convention) => (
+              <option key={convention.id} value={convention.id}>
+                {convention.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
 
       <label className="block">
         <span className="text-sm font-medium">Photos</span>
