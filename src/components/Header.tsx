@@ -24,6 +24,11 @@ export default async function Header() {
               <span className="text-sm text-muted-foreground">
                 {user.name ?? "Signed in"}
               </span>
+              {user.role === "ADMIN" ? (
+                <Link href="/admin" className="text-sm font-medium underline">
+                  Admin
+                </Link>
+              ) : null}
               <button type="submit" className="text-sm font-medium underline">
                 Sign out
               </button>
