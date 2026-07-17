@@ -21,9 +21,12 @@ export default async function Header() {
               }}
               className="flex items-center gap-3"
             >
-              <span className="text-sm text-muted-foreground">
+              <Link
+                href="/me"
+                className="text-sm text-muted-foreground underline transition-colors hover:text-foreground"
+              >
                 {user.name ?? "Signed in"}
-              </span>
+              </Link>
               {user.role === "ADMIN" ? (
                 <Link href="/admin" className="text-sm font-medium underline">
                   Admin

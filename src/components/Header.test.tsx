@@ -29,4 +29,13 @@ describe("Header", () => {
     render(await Header());
     expect(screen.queryByText("Admin")).not.toBeInTheDocument();
   });
+
+  it("links the logged-in user's name to /me", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u3", name: "Cleo", role: "USER" });
+    render(await Header());
+    expect(screen.getByRole("link", { name: "Cleo" })).toHaveAttribute(
+      "href",
+      "/me",
+    );
+  });
 });
