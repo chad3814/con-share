@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, DragEvent } from "react";
 import { resolveContentType } from "@/lib/content-type";
 
 type ConventionOption = { id: string; name: string };
@@ -67,15 +67,17 @@ export default function Uploader({
   );
   const [items, setItems] = useState<FileItem[]>([]);
   const [batchInFlight, setBatchInFlight] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const entriesRef = useRef<FileEntry[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function updateItem(index: number, patch: Partial<FileItem>): void {
     setItems((prev) => prev.map((item, i) => (i === index ? { ...item, ...patch } : item)));
   }
 
-  function handleFilesSelected(event: ChangeEvent<HTMLInputElement>): void {
-    const fileList = event.target.files;
-    if (!fileList) return;
+  // Shared entry point for both the file dialog and drag-and-drop.
+  function handleFiles(fileList: FileList | null): void {
+    if (!fileList || fileList.length === 0) return;
     const files = Array.from(fileList);
     entriesRef.current = files.map((file) => ({
       file,
@@ -91,6 +93,26 @@ export default function Uploader({
         state: "pending",
       })),
     );
+  }
+
+  function handleFilesSelected(event: ChangeEvent<HTMLInputElement>): void {
+    handleFiles(event.target.files);
+  }
+
+  function handleDrop(event: DragEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    setDragActive(false);
+    handleFiles(event.dataTransfer.files);
+  }
+
+  function handleDragOver(event: DragEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    if (!dragActive) setDragActive(true);
+  }
+
+  function handleDragLeave(event: DragEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    setDragActive(false);
   }
 
   // Uploads (if not already uploaded) then processes a single file, updating
@@ -211,16 +233,32 @@ export default function Uploader({
         </label>
       ) : null}
 
-      <label className="block">
+      <div className="block">
         <span className="text-sm font-medium">Photos</span>
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className={`mt-1 flex w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed px-4 py-8 text-center text-sm transition-colors ${
+            dragActive
+              ? "border-primary bg-muted text-foreground"
+              : "border-border text-muted-foreground hover:border-muted-foreground hover:bg-muted"
+          }`}
+        >
+          <span className="font-medium">Drop photos here</span>
+          <span className="text-xs">or click to browse</span>
+        </button>
         <input
+          ref={inputRef}
           type="file"
           multiple
           accept={ACCEPT}
           onChange={handleFilesSelected}
-          className="mt-1 block w-full text-sm"
+          className="hidden"
         />
-      </label>
+      </div>
 
       <button
         type="button"
