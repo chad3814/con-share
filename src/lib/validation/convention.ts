@@ -16,7 +16,9 @@ export const conventionInputSchema = z.object({
   location: optionalTrimmed,
   startDate: optionalDate,
   endDate: optionalDate,
-  url: z.preprocess(emptyToUndefined, z.url().optional()),
+  // Restrict to http/https so a stored url can't smuggle a `javascript:` or
+  // `data:` scheme into an <a href> rendered on public pages.
+  url: z.preprocess(emptyToUndefined, z.url({ protocol: /^https?$/ }).optional()),
 });
 
 export type ConventionInput = z.infer<typeof conventionInputSchema>;

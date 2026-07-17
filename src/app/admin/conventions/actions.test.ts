@@ -200,6 +200,22 @@ describe("admin convention server actions - auth gate", () => {
       expect(redirect).not.toHaveBeenCalled();
     });
 
+    it("does not create the convention when logo processing fails on a corrupt image", async () => {
+      vi.mocked(processLogo).mockRejectedValueOnce(new Error("Input buffer contains unsupported image format"));
+      const formData = new FormData();
+      formData.set("name", "LitRPG Con");
+      formData.set("logo", new File([Buffer.from("not-an-image")], "logo.png", { type: "image/png" }));
+
+      await expect(createConventionAction(formData)).rejects.toThrow(
+        "unsupported image format",
+      );
+
+      expect(createConvention).not.toHaveBeenCalled();
+      expect(putObject).not.toHaveBeenCalled();
+      expect(prisma.convention.update).not.toHaveBeenCalled();
+      expect(redirect).not.toHaveBeenCalled();
+    });
+
     it("rejects an unsupported logo type on update before any mutation runs", async () => {
       const formData = new FormData();
       formData.set("name", "Renamed Con");

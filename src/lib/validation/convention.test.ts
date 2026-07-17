@@ -28,4 +28,14 @@ describe("parseConventionInput", () => {
   it("throws on an invalid url", () => {
     expect(() => parseConventionInput({ name: "Con", url: "notaurl" })).toThrow();
   });
+  it("rejects a javascript: scheme url", () => {
+    expect(() =>
+      parseConventionInput({ name: "Con", url: "javascript:alert(1)" }),
+    ).toThrow();
+  });
+  it("rejects a data: scheme url", () => {
+    expect(() =>
+      parseConventionInput({ name: "Con", url: "data:text/html,<script>alert(1)</script>" }),
+    ).toThrow();
+  });
 });
